@@ -26,6 +26,12 @@ Bot written in TS that uses flashswaps of Pancakeswap on BSC network.
         npm run test wbnb busd
         ```
 
+5. Find oppotunity.
+
+    ```
+    npm run find
+    ```
+
 You can add more tokens in `/src/config/tokens.json`.
 
 You can change flashswap contract address in `/src/config/address.json`.

@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/mainnet",
-    "test": "ts-node src/testnet"
+    "test": "ts-node src/testnet",
+    "find": "ts-node src/finder"
   },
   "repository": {
     "type": "git",
