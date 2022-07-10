@@ -1,2 +1,0 @@
-# flasloanbotbsc
-bsc flashloan
