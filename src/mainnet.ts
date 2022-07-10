@@ -164,14 +164,14 @@ const run = async (initial: BN, tokens: Token[]) => {
         tokens[0].symbol
     );
 
-    // if (profit.gt(0)) {
-    //     let response = await inquirer.prompt([{
-    //         type: 'input',
-    //         name: 'isExe',
-    //         message: `Are you sure execute this trade? (yes/no)`
-    //     }]);
-    //     response.isExe === 'yes' && await callFlashSwap(maxAmountOut, tokens, swapPath);
-    // }
+    if (profit.gt(0)) {
+        let response = await inquirer.prompt([{
+            type: 'input',
+            name: 'isExe',
+            message: `Are you sure execute this trade? (yes/no)`
+        }]);
+        response.isExe === 'yes' && await callFlashSwap(maxAmountOut, tokens, swapPath);
+    }
 
     return [profit, table];
 }
