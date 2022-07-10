@@ -47,6 +47,8 @@ const swapRouter: Contract[] = [
 ];
 
 const getAllQuotes = async (amountIn: BN, tokenIn: Token, tokenOut: Token) => {
+    if (!amountIn.isFinite()) return new Array(swapRouter.length).fill(new BN(-Infinity));
+    
     const input = amountIn.toFixed();
     const calldata = swapRouter.map(router => [
         router.options.address,
