@@ -1,7 +1,8 @@
 import 'dotenv/config';
+import fs from 'fs';
 import Web3 from 'web3';
+import axios from 'axios';
 import BN from 'bignumber.js';
-import inquirer from 'inquirer';
 import { Table } from 'console-table-printer';
 
 import { AbiItem } from 'web3-utils';
@@ -16,6 +17,9 @@ import { NETWORK, FIXED, RPC_URL } from './config';
 
 import IMulticall from './abi/multicall.json';
 import IRouter from './abi/router.json';
+
+var tokenInfo;
+var output = [];
 
 const web3 = new Web3(RPC_URL[NETWORK]);
 
@@ -40,6 +44,24 @@ const swapRouter: Contract[] = [
     new web3.eth.Contract(IRouter as AbiItem[], ADDRESS[NETWORK]['hyperswap']),
     new web3.eth.Contract(IRouter as AbiItem[], ADDRESS[NETWORK]['bscswap']),
 ];
+
+const getTokenInfo = async () => {
+    const tokens = Object.keys(TOKEN[NETWORK]).join(',');
+    const res = await axios.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest', {
+        headers: {
+            'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_KEY
+        },
+        params: {
+            symbol: tokens,
+            convert: 'USD'
+        }
+    })
+    .catch(err => {
+        console.log(err.message);
+        process.exit();
+    });
+    tokenInfo = res.data.data;
+}
 
 const getAllQuotes = async (amountIn: BN, tokenIn: Token, tokenOut: Token) => {
     if (!amountIn.isFinite()) return new Array(swapRouter.length).fill(new BN(-Infinity));
@@ -115,6 +137,7 @@ const run = async (initial: BN, tokens: Token[]) => {
     table.printTable();
 
     const profit = maxAmountOut[tokens.length].minus(maxAmountOut[0]).minus(fee);
+    const profitUSD = new BN(tokenInfo[tokens[0].symbol].quote.USD.price).times(profit).div(new BN(10).pow(tokens[0].decimals)).toFixed(FIXED);
     console.log(
         'Input:',
         toPrintable(initial, tokens[0].decimals, FIXED).yellow,
@@ -123,25 +146,36 @@ const run = async (initial: BN, tokens: Token[]) => {
         profit.gt(0) ?
             toPrintable(profit, tokens[0].decimals, FIXED).green :
             toPrintable(profit, tokens[0].decimals, FIXED).red,
-        tokens[0].symbol
+        tokens[0].symbol,
+        `($${profitUSD})`
     );
+
+    output.push({
+        tokens: tokens.map(token => token.symbol),
+        profitUSD: profitUSD
+    });
 
     return [profit, table];
 }
 
 const main = async () => {
+    await getTokenInfo();
+
     const WBNB: Token = {
         name: "WBNB Token",
         symbol: "WBNB",
         address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
         decimals: 18
     }
-    let initial = new BN(1).times(new BN(10).pow(WBNB.decimals));
+    const initial = new BN(1).times(new BN(10).pow(WBNB.decimals));
 
     for (let token in TOKEN[NETWORK]) {
         console.log();
         await run(initial, [WBNB, TOKEN[NETWORK][token]]);
     }
+
+    output.sort((a, b) => parseFloat(b.profit) - parseFloat(a.profit));
+    fs.writeFileSync('output.json', JSON.stringify(output));
 }
 
 main();
