@@ -46,7 +46,7 @@ const getQuote = async (amountIn: BN, tokenIn: Token, tokenOut: Token): Promise<
             tokenIn.address,
             erc20.methods.approve(
                 res.data.tx.to,
-                res.data.toTokenAmount
+                res.data.fromTokenAmount
             ).encodeABI()
         ],
         [res.data.tx.to, res.data.tx.data]
@@ -60,7 +60,7 @@ const callFlashSwap = async (loanToken: Token, loanAmount: BN, callData: CallDat
     const tx = {
         from: account,
         to: flashSwap.options.address,
-        gas: 500000,
+        gas: 1000000,
         data: data
     };
     const signedTx = await web3.eth.accounts.signTransaction(tx, process.env.PRIVATE_KEY);
