@@ -7,7 +7,8 @@
     "build": "tsc",
     "start": "ts-node src/mainnet",
     "test": "ts-node src/testnet",
-    "find": "ts-node src/finder"
+    "find": "ts-node src/finder",
+    "1inch": "ts-node src/1inch"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   "author": "supercoolx",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
     "colors": "^1.4.0",
     "console-table-printer": "^2.11.0",
     "dotenv": "^16.0.1",

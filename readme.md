@@ -19,7 +19,7 @@ Bot written in TS that uses flashswaps of Pancakeswap on BSC network.
         ```
         npm start wbnb busd
         npm start busd wbnb cake
-        ...
+        npm run 1inch wbnb busd
         ```
     - Testnet
         ```
