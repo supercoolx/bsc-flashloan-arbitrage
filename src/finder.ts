@@ -9,7 +9,7 @@ import { AbiItem } from 'web3-utils';
 import { Contract } from 'web3-eth-contract';
 import { Token } from './utils/types';
 
-import TOKEN from './config/tokens.json';
+import TOKEN from './config/tokenshort.json';
 import ADDRESS from './config/address.json';
 
 import { toPrintable } from './utils';
