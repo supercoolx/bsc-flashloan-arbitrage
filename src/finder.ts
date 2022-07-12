@@ -184,7 +184,7 @@ const main = async () => {
     await getTokens(args, 0);
 
     output.sort((a, b) => parseFloat(a.profitUSD) - parseFloat(b.profitUSD));
-    fs.writeFileSync('output.json', JSON.stringify(output));
+    fs.writeFileSync('output.json', JSON.stringify(output, null, '\t'));
 }
 
 main();
