@@ -171,8 +171,6 @@ const main = async () => {
         process.exit();
     });
 
-    const tokenSymbols = Object.keys(TOKEN[NETWORK]);
-
     const getTokens = async (symbols: string[], index: number) => {
         if (!symbols[index]) return await run(symbols.map(symbol => TOKEN[NETWORK][symbol]));
         if (symbols[index] === '*') {
@@ -185,7 +183,7 @@ const main = async () => {
 
     await getTokens(args, 0);
 
-    output.sort((a, b) => parseFloat(b.profit) - parseFloat(a.profit));
+    output.sort((a, b) => parseFloat(a.profitUSD) - parseFloat(b.profitUSD));
     fs.writeFileSync('output.json', JSON.stringify(output));
 }
 
