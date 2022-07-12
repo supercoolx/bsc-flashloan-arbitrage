@@ -138,7 +138,7 @@ const run = async (tokens: Token[]) => {
     table.printTable();
 
     const profit = maxAmountOut[tokens.length].minus(maxAmountOut[0]).minus(fee);
-    const profitUSD = profit.isFinite() ? new BN(tokenInfo[tokens[0].symbol].quote.USD.price).times(profit).div(new BN(10).pow(tokens[0].decimals)).toFixed(FIXED) : 'N/A';
+    const profitUSD = tokenInfo[tokens[0].symbol] && profit.isFinite() ? new BN(tokenInfo[tokens[0].symbol].quote.USD.price).times(profit).div(new BN(10).pow(tokens[0].decimals)).toFixed(FIXED) : 'N/A';
     console.log(
         'Input:',
         toPrintable(initial, tokens[0].decimals, FIXED).yellow,

@@ -29,9 +29,21 @@ Bot written in TS that uses flashswaps of Pancakeswap on BSC network.
     ```
 
 5. Find oppotunity.
+    - Find two pair.
 
     ```
-    npm run find
+    npm run find wbnb *
+    ```
+    - You can change swap order like this.
+    ```
+    npm run find * wbnb
+    ```
+    - Find three pair.
+    ```
+    npm run find wbnb busd *
+    npm run find wbnb * *
+    npm run find * wbnb *
+    ...
     ```
 
 You can add more tokens in `/src/config/tokens.json`.
