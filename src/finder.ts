@@ -85,11 +85,12 @@ const getAllQuotes = async (amountIn: BN, tokenIn: Token, tokenOut: Token) => {
     return quotes;
 }
 
-const run = async (initial: BN, tokens: Token[]) => {
+const run = async (tokens: Token[]) => {
     console.log(tokens.map(token => token.symbol.yellow).join(' -> ') + ' -> ' + tokens[0].symbol.yellow);
 
     const table = new Table();
 
+    const initial = new BN(1).times(new BN(10).pow(tokens[0].decimals));
     const maxAmountOut: BN[] = [initial,];
     const amountOut: BN[][] = [];
     const swapPath: Contract[] = [];
@@ -137,7 +138,7 @@ const run = async (initial: BN, tokens: Token[]) => {
     table.printTable();
 
     const profit = maxAmountOut[tokens.length].minus(maxAmountOut[0]).minus(fee);
-    const profitUSD = new BN(tokenInfo[tokens[0].symbol].quote.USD.price).times(profit).div(new BN(10).pow(tokens[0].decimals)).toFixed(FIXED);
+    const profitUSD = profit.isFinite() ? new BN(tokenInfo[tokens[0].symbol].quote.USD.price).times(profit).div(new BN(10).pow(tokens[0].decimals)).toFixed(FIXED) : 'N/A';
     console.log(
         'Input:',
         toPrintable(initial, tokens[0].decimals, FIXED).yellow,
@@ -147,7 +148,7 @@ const run = async (initial: BN, tokens: Token[]) => {
             toPrintable(profit, tokens[0].decimals, FIXED).green :
             toPrintable(profit, tokens[0].decimals, FIXED).red,
         tokens[0].symbol,
-        `($${profitUSD})`
+        `($ ${profitUSD})`
     );
 
     output.push({
@@ -161,20 +162,28 @@ const run = async (initial: BN, tokens: Token[]) => {
 const main = async () => {
     await getTokenInfo();
 
-    const WBNB: Token = {
-        name: "WBNB Token",
-        symbol: "WBNB",
-        address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
-        decimals: 18
-    }
-    const initial = new BN(1).times(new BN(10).pow(WBNB.decimals));
+    let args = process.argv.slice(2).map(arg => arg.toUpperCase());
+    if (args.length < 2) return console.log('Please input at least two token.');
 
-    for (let token in TOKEN[NETWORK]) {
-        console.log();
-        await run(initial, [WBNB, TOKEN[NETWORK][token]]);
+    args.forEach(arg => {
+        if (arg === '*' ||  TOKEN[NETWORK][arg]) return;
+        console.log(`There's no ${arg} token.`.red);
+        process.exit();
+    });
+
+    const getTokens = async (symbols: string[], index: number) => {
+        if (!symbols[index]) return await run(symbols.map(symbol => TOKEN[NETWORK][symbol]));
+        if (symbols[index] === '*') {
+            for (let tokenSymbol in TOKEN[NETWORK]) {
+                await getTokens([...symbols.slice(0, index), tokenSymbol, ...symbols.slice(index + 1)], index + 1);
+            }
+        }
+        else await getTokens(symbols, index + 1);
     }
 
-    output.sort((a, b) => parseFloat(b.profit) - parseFloat(a.profit));
+    await getTokens(args, 0);
+
+    output.sort((a, b) => parseFloat(a.profitUSD) - parseFloat(b.profitUSD));
     fs.writeFileSync('output.json', JSON.stringify(output));
 }
 
