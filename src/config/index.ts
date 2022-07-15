@@ -1,6 +1,6 @@
-import { Network } from "../utils/types"
+import { Network } from "../utils/types";
 
-export const NETWORK: Network = 'mainnet';
+export const NETWORK: Network = (process.env.NETWORK.trim() || 'mainnet') as Network;
 export const FIXED = 4;
 export const RPC_URL = {
     'mainnet': 'https://bsc-dataseed.binance.org/',

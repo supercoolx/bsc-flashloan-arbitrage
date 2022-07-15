@@ -5,8 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node src/index",
-    "test": "ts-node src/index",
+    "start": "SET NETWORK=mainnet && ts-node src/index",
+    "test": "SET NETWORK=testnet && ts-node src/index",
+    "local": "SET NETWORK=localhost && ts-node src/index",
     "find": "ts-node src/finder",
     "1inch": "ts-node src/1inch"
   },
