@@ -1,34 +1,50 @@
 {
     "mainnet": {
-        "flashSwap": "0x3519e6cdb1D17290b12A1c24aDA620F028E2c424",
-        "1inch": "0x1111111254fb6c44bAC0beD2854e76F90643097d",
-        "multicall": "0x804708De7AF615085203FA2B18Eae59C5738e2a9",
-        "PancakeFactory": "0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73",
-        "PancakeRouter": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
-        "pancakeswap": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
-        "sushiswap": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
-        "apeswap": "0xcF0feBd3f17CEf5b47b0cD257aCf6025c5BFf3b7",
-        "babyswap": "0x325E343f1dE602396E256B67eFd1F61C3A6B38Bd",
-        "biswap": "0x3a6d8cA21D1CF76F653A67577FA0D27453350dD8",
-        "mdex": "0x7DAe51BD3E3376B8c7c4900E9107f12Be3AF1bA8",
-        "julswap": "0xbd67d157502A23309Db761c41965600c2Ec788b2",
-        "waultswap": "0xD48745E39BbED146eEC15b79cBF964884F9877c2",
-        "bakeryswap": "0xCDe540d7eAFE93aC5fE6233Bee57E1270D3E330F",
-        "jetswap": "0xBe65b8f75B9F20f4C522e0067a3887FADa714800",
-        "cheeseswap": "0x3047799262d8D2EF41eD2a222205968bC9B0d895",
-        "elkdex": "0xA63B831264183D755756ca9AE5190fF5183d65D6",
-        "pantherswap": "0x24f7C33ae5f77e2A9ECeed7EA858B4ca2fa1B7eC",
-        "cafeswap": "0x933DAea3a5995Fb94b14A7696a5F3ffD7B1E385A",
-        "radioshack": "0x5bc3ED94919af03279c8613cB807ab667cE5De99",
-        "hyperswap": "0x3bc677674df90A9e5D741f28f6CA303357D0E4Ec",
-        "bscswap": "0xd954551853F55deb4Ae31407c423e67B1621424A"
+        "util": {
+            "flashSwap": "0x3519e6cdb1D17290b12A1c24aDA620F028E2c424",
+            "1inch": "0x1111111254fb6c44bAC0beD2854e76F90643097d",
+            "multicall": "0xfF6FD90A470Aaa0c1B8A54681746b07AcdFedc9B",
+            "PancakeFactory": "0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73",
+            "PancakeRouter": "0x10ED43C718714eb63d5aA57B78B54704E256024E"
+        },
+        "dex": {
+            "PancakeSwap": "0x10ED43C718714eb63d5aA57B78B54704E256024E",
+            "SushiSwap": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+            "ApeSwap": "0xcF0feBd3f17CEf5b47b0cD257aCf6025c5BFf3b7",
+            "BabySwap": "0x325E343f1dE602396E256B67eFd1F61C3A6B38Bd",
+            "BiSwap": "0x3a6d8cA21D1CF76F653A67577FA0D27453350dD8",
+            "MDEX": "0x7DAe51BD3E3376B8c7c4900E9107f12Be3AF1bA8",
+            "JulSwap": "0xbd67d157502A23309Db761c41965600c2Ec788b2",
+            "WaultSwap": "0xD48745E39BbED146eEC15b79cBF964884F9877c2",
+            "BakerySwap": "0xCDe540d7eAFE93aC5fE6233Bee57E1270D3E330F",
+            "JetSwap": "0xBe65b8f75B9F20f4C522e0067a3887FADa714800",
+            "CheeseSwap": "0x3047799262d8D2EF41eD2a222205968bC9B0d895",
+            "ElkDex": "0xA63B831264183D755756ca9AE5190fF5183d65D6",
+            "PantherSwap": "0x24f7C33ae5f77e2A9ECeed7EA858B4ca2fa1B7eC",
+            "CafeSwap": "0x933DAea3a5995Fb94b14A7696a5F3ffD7B1E385A",
+            "RadioShack": "0x5bc3ED94919af03279c8613cB807ab667cE5De99",
+            "HyperSwap": "0x3bc677674df90A9e5D741f28f6CA303357D0E4Ec",
+            "BSCSwap": "0xd954551853F55deb4Ae31407c423e67B1621424A"
+        },
+        "chainlink": {
+            "WBNB": "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE",
+            "BUSD": "0xcBb98864Ef56E9042e7d2efef76141f15731B82f",
+            "CAKE": "0xB6064eD41d4f67e353768aA239cA86f4F73665a1",
+            "DAI": "0x132d3C0B1D2cEa0BC552588063bdBb210FDeecfA",
+            "BETH": "0x2A3796273d47c4eD363b361D3AEFb7F7E2A13782",
+            "ETH": "0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e"
+        }
     },
     "testnet": {
-        "flashSwap": "0xcCfB2991dD40C4Ba9Da829864dB2281559e95C3F",
-        "multicall": "0x12a789738276de5391079Ad7F38eB74f517b57b3",
-        "PancakeFactory": "0x6725F303b657a9451d8BA641348b6761A6CC7a17",
-        "PancakeRouter": "0xD99D1c33F9fC3444f8101754aBC46c52416550D1",
-        "pancakeswap": "0xD99D1c33F9fC3444f8101754aBC46c52416550D1",
-        "sushiswap": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506"
+        "util": {
+            "flashSwap": "0xcCfB2991dD40C4Ba9Da829864dB2281559e95C3F",
+            "multicall": "0xA6949B8FBa9DF546b9c66F98CFCa960A96E3b68e",
+            "PancakeFactory": "0x6725F303b657a9451d8BA641348b6761A6CC7a17",
+            "PancakeRouter": "0xD99D1c33F9fC3444f8101754aBC46c52416550D1"
+        },
+        "dex": {
+            "PancakeSwap": "0xD99D1c33F9fC3444f8101754aBC46c52416550D1",
+            "SushiSwap": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506"
+        }
     }
 }
