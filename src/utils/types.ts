@@ -5,7 +5,7 @@ export type Token = {
     decimals: number
 }
 
-export type Network = "mainnet" | "testnet";
+export type Network = "mainnet" | "testnet" | "localhost";
 
 export type AddressType = {
     [key in Network]: {
@@ -14,3 +14,12 @@ export type AddressType = {
 }
 
 export type CallData = [string, string]
+
+export type MultiCall = {
+    blockNumber: string
+    blockHash: string
+    returnData: {
+        success: boolean
+        returnData: string
+    }[]
+}

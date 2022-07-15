@@ -1,27 +1,18 @@
 import 'dotenv/config';
-import Web3 from 'web3';
 import axios from 'axios';
 import BN from 'bignumber.js';
 import inquirer from 'inquirer';
 import { Table } from 'console-table-printer';
 
-import { AbiItem } from 'web3-utils';
 import { Token, CallData } from './utils/types';
 
 import TOKEN from './config/tokens.json';
-import ADDRESS from './config/address.json';
 
 import { toPrintable } from './utils';
+import { web3, erc20, flashSwap } from './utils/global';
 import { NETWORK, FIXED, RPC_URL } from './config';
 
-import IERC20 from './abi/erc20.json';
-import IPancakeFlashSwap from './abi/PancakeFlashSwap.json';
-
-const web3 = new Web3(RPC_URL[NETWORK]);
 const account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY).address;
-
-const flashSwap = new web3.eth.Contract(IPancakeFlashSwap as AbiItem[], ADDRESS[NETWORK]['flashSwap']);
-const erc20 = new web3.eth.Contract(IERC20 as AbiItem[], '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE');
 
 const getQuote = async (amountIn: BN, tokenIn: Token, tokenOut: Token): Promise<[string, BN, CallData[]]> => {
     const res = await axios.get('https://api.1inch.exchange/v4.0/56/swap', {
@@ -74,6 +65,7 @@ const run = async (initial: BN, tokens: Token[]) => {
     const callData: CallData[] = [];
     const amountOut: BN[] = [initial,];
     const fee = initial.times(3).div(997).plus(1);
+    const blockNumber = await web3.eth.getBlockNumber();
 
     for (let i = 0; i < tokens.length; i++) {
         let next = (i + 1) % tokens.length;
@@ -94,6 +86,7 @@ const run = async (initial: BN, tokens: Token[]) => {
     }
 
     table.printTable();
+    console.log('BlockNumber:', `#${blockNumber}`);
 
     const profit = amountOut[tokens.length].minus(amountOut[0]).minus(fee);
     console.log(
