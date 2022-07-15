@@ -1,10 +1,13 @@
 import 'colors';
 import 'dotenv/config';
 import BN from 'bignumber.js';
+import { AbiItem } from 'web3-utils';
 import { Table } from 'console-table-printer';
 import { Contract } from 'web3-eth-contract';
 
-import { FIXED } from '../config';
+import quoter from '../abi/quoter.json';
+import ADDRESS from '../config/address.json';
+import { FIXED, NETWORK } from '../config';
 import { Token, CallData, MultiCall } from './types';
 import { web3, dexNames, erc20, swapRouter, flashSwap, multicall } from './global';
 
@@ -16,9 +19,16 @@ export const toPrintable = (amount: BN, decimal: number, fixed: number) => {
         : 'N/A';
 }
 
+export const getPriceUSD = async (token: Token) => {
+    if (!ADDRESS[NETWORK]['chainlink'][token.symbol]) return null;
+    const quote = new web3.eth.Contract(quoter as AbiItem[], ADDRESS[NETWORK]['chainlink'][token.symbol]);
+    const priceString: string = await quote.methods.latestAnswer().call();
+    return new BN(priceString);
+}
+
 export const getAllQuotes = async (amountIn: BN, tokenIn: Token, tokenOut: Token): Promise<[string, BN[]]> => {
     if (!amountIn.isFinite()) return ['N/A', new Array(swapRouter.length).fill(new BN(-Infinity))];
-    
+
     const input = amountIn.toFixed();
     const calldata: CallData[] = swapRouter.map(router => [
         router.options.address,
@@ -35,7 +45,7 @@ export const getAllQuotes = async (amountIn: BN, tokenIn: Token, tokenOut: Token
 
 export const callFlashSwap = async (inputAmount: BN[], tokenPath: Token[], swapPath: Contract[]) => {
     if (swapPath.length !== tokenPath.length || swapPath.length !== inputAmount.length - 1) return console.log('Invalid swap path.');
-    
+
     const deadline = ~~(Date.now() / 1000) + 3600 * 24;
     const callData: CallData[] = []
     swapPath.forEach((swap, i) => {
@@ -72,7 +82,7 @@ export const callFlashSwap = async (inputAmount: BN[], tokenPath: Token[], swapP
 
 export const run = async (initial: BN, tokens: Token[]) => {
     console.log(tokens.map(token => token.symbol.yellow).join(' -> ') + ' -> ' + tokens[0].symbol.yellow);
-    
+
     const table = new Table();
 
     const maxAmountOut: BN[] = [initial,];
@@ -80,6 +90,7 @@ export const run = async (initial: BN, tokens: Token[]) => {
     const swapPath: Contract[] = [];
     const blockNumber: string[] = [];
     const fee = initial.times(3).idiv(997).plus(1);
+    const tokenPriceUSD = await getPriceUSD(tokens[0]);
 
     for (let i = 0; i < tokens.length; i++) {
         let next = (i + 1) % tokens.length;
@@ -124,8 +135,9 @@ export const run = async (initial: BN, tokens: Token[]) => {
     const profitPrint = toPrintable(profit, tokens[0].decimals, FIXED);
     console.log(
         'Input:', toPrintable(initial, tokens[0].decimals, FIXED).yellow, tokens[0].symbol,
-        '\tEstimate profit:', profit.gt(0) ? profitPrint.green : profitPrint.red,
-        tokens[0].symbol, '\n'
+        '\tEstimate profit:', profit.gt(0) ? profitPrint.green : profitPrint.red, tokens[0].symbol,
+        `($ ${tokenPriceUSD ? toPrintable(tokenPriceUSD.times(profit), tokens[0].decimals + 8, FIXED) : 'N/A'})`,
+        '\n'
     );
 
     return {

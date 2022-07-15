@@ -3,7 +3,12 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_factory",
+                "name": "_aggregator",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_accessController",
                 "type": "address"
             }
         ],
@@ -11,8 +16,116 @@
         "type": "constructor"
     },
     {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "int256",
+                "name": "current",
+                "type": "int256"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "roundId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "updatedAt",
+                "type": "uint256"
+            }
+        ],
+        "name": "AnswerUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "roundId",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "startedBy",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "startedAt",
+                "type": "uint256"
+            }
+        ],
+        "name": "NewRound",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipTransferRequested",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
         "inputs": [],
-        "name": "factory",
+        "name": "acceptOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "accessController",
+        "outputs": [
+            {
+                "internalType": "contract AccessControllerInterface",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "aggregator",
         "outputs": [
             {
                 "internalType": "address",
@@ -26,247 +139,370 @@
     {
         "inputs": [
             {
-                "internalType": "bytes",
-                "name": "path",
-                "type": "bytes"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amountIn",
-                "type": "uint256"
+                "internalType": "address",
+                "name": "_aggregator",
+                "type": "address"
             }
         ],
-        "name": "quoteExactInput",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "amountOut",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint160[]",
-                "name": "afterSqrtPList",
-                "type": "uint160[]"
-            },
-            {
-                "internalType": "uint32[]",
-                "name": "initializedTicksCrossedList",
-                "type": "uint32[]"
-            },
-            {
-                "internalType": "uint256",
-                "name": "gasEstimate",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "components": [
-                    {
-                        "internalType": "address",
-                        "name": "tokenIn",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "tokenOut",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "amountIn",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint24",
-                        "name": "feeUnits",
-                        "type": "uint24"
-                    },
-                    {
-                        "internalType": "uint160",
-                        "name": "limitSqrtP",
-                        "type": "uint160"
-                    }
-                ],
-                "internalType": "struct IQuoterV2.QuoteExactInputSingleParams",
-                "name": "params",
-                "type": "tuple"
-            }
-        ],
-        "name": "quoteExactInputSingle",
-        "outputs": [
-            {
-                "components": [
-                    {
-                        "internalType": "uint256",
-                        "name": "usedAmount",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "returnedAmount",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint160",
-                        "name": "afterSqrtP",
-                        "type": "uint160"
-                    },
-                    {
-                        "internalType": "uint32",
-                        "name": "initializedTicksCrossed",
-                        "type": "uint32"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "gasEstimate",
-                        "type": "uint256"
-                    }
-                ],
-                "internalType": "struct IQuoterV2.QuoteOutput",
-                "name": "output",
-                "type": "tuple"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes",
-                "name": "path",
-                "type": "bytes"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amountOut",
-                "type": "uint256"
-            }
-        ],
-        "name": "quoteExactOutput",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "amountIn",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint160[]",
-                "name": "afterSqrtPList",
-                "type": "uint160[]"
-            },
-            {
-                "internalType": "uint32[]",
-                "name": "initializedTicksCrossedList",
-                "type": "uint32[]"
-            },
-            {
-                "internalType": "uint256",
-                "name": "gasEstimate",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "components": [
-                    {
-                        "internalType": "address",
-                        "name": "tokenIn",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "tokenOut",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "amount",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint24",
-                        "name": "feeUnits",
-                        "type": "uint24"
-                    },
-                    {
-                        "internalType": "uint160",
-                        "name": "limitSqrtP",
-                        "type": "uint160"
-                    }
-                ],
-                "internalType": "struct IQuoterV2.QuoteExactOutputSingleParams",
-                "name": "params",
-                "type": "tuple"
-            }
-        ],
-        "name": "quoteExactOutputSingle",
-        "outputs": [
-            {
-                "components": [
-                    {
-                        "internalType": "uint256",
-                        "name": "usedAmount",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "returnedAmount",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint160",
-                        "name": "afterSqrtP",
-                        "type": "uint160"
-                    },
-                    {
-                        "internalType": "uint32",
-                        "name": "initializedTicksCrossed",
-                        "type": "uint32"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "gasEstimate",
-                        "type": "uint256"
-                    }
-                ],
-                "internalType": "struct IQuoterV2.QuoteOutput",
-                "name": "output",
-                "type": "tuple"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "int256",
-                "name": "amount0Delta",
-                "type": "int256"
-            },
-            {
-                "internalType": "int256",
-                "name": "amount1Delta",
-                "type": "int256"
-            },
-            {
-                "internalType": "bytes",
-                "name": "path",
-                "type": "bytes"
-            }
-        ],
-        "name": "swapCallback",
+        "name": "confirmAggregator",
         "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "description",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_roundId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getAnswer",
+        "outputs": [
+            {
+                "internalType": "int256",
+                "name": "",
+                "type": "int256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint80",
+                "name": "_roundId",
+                "type": "uint80"
+            }
+        ],
+        "name": "getRoundData",
+        "outputs": [
+            {
+                "internalType": "uint80",
+                "name": "roundId",
+                "type": "uint80"
+            },
+            {
+                "internalType": "int256",
+                "name": "answer",
+                "type": "int256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "startedAt",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "updatedAt",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint80",
+                "name": "answeredInRound",
+                "type": "uint80"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_roundId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getTimestamp",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "latestAnswer",
+        "outputs": [
+            {
+                "internalType": "int256",
+                "name": "",
+                "type": "int256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "latestRound",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "latestRoundData",
+        "outputs": [
+            {
+                "internalType": "uint80",
+                "name": "roundId",
+                "type": "uint80"
+            },
+            {
+                "internalType": "int256",
+                "name": "answer",
+                "type": "int256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "startedAt",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "updatedAt",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint80",
+                "name": "answeredInRound",
+                "type": "uint80"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "latestTimestamp",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint16",
+                "name": "",
+                "type": "uint16"
+            }
+        ],
+        "name": "phaseAggregators",
+        "outputs": [
+            {
+                "internalType": "contract AggregatorV2V3Interface",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "phaseId",
+        "outputs": [
+            {
+                "internalType": "uint16",
+                "name": "",
+                "type": "uint16"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_aggregator",
+                "type": "address"
+            }
+        ],
+        "name": "proposeAggregator",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "proposedAggregator",
+        "outputs": [
+            {
+                "internalType": "contract AggregatorV2V3Interface",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint80",
+                "name": "_roundId",
+                "type": "uint80"
+            }
+        ],
+        "name": "proposedGetRoundData",
+        "outputs": [
+            {
+                "internalType": "uint80",
+                "name": "roundId",
+                "type": "uint80"
+            },
+            {
+                "internalType": "int256",
+                "name": "answer",
+                "type": "int256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "startedAt",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "updatedAt",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint80",
+                "name": "answeredInRound",
+                "type": "uint80"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "proposedLatestRoundData",
+        "outputs": [
+            {
+                "internalType": "uint80",
+                "name": "roundId",
+                "type": "uint80"
+            },
+            {
+                "internalType": "int256",
+                "name": "answer",
+                "type": "int256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "startedAt",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "updatedAt",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint80",
+                "name": "answeredInRound",
+                "type": "uint80"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_accessController",
+                "type": "address"
+            }
+        ],
+        "name": "setController",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_to",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "version",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
         "stateMutability": "view",
         "type": "function"
     }
