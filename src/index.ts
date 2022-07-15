@@ -41,7 +41,6 @@ const main = async () => {
 
     
     while (true) {
-        console.log();
         let response = await inquirer.prompt([{
             type: 'input',
             name: 'input',
