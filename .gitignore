@@ -4,4 +4,3 @@ dist
 .env
 
 test.js
-output.json
