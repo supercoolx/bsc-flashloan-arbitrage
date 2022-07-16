@@ -2,22 +2,26 @@ import 'dotenv/config';
 import fs from 'fs';
 import BN from 'bignumber.js';
 
-import { run } from './utils';
+import { run, stripAnsiCodes } from './utils';
 import { Token } from './utils/types';
 
 import { NETWORK } from './config';
 import TOKEN from './config/tokenshort.json';
 
-var output = [];
-
 const runBot = async (tokens: Token[]) => {
     const initial = new BN(1).times(new BN(10).pow(tokens[0].decimals));
     const res = await run(initial, tokens);
 
-    output.push({
-        tokens: tokens.map(token => token.symbol),
-        profit: res.profit.toFixed()
-    });
+    if (res.profit.lte(0)) return ;
+    let output: string = "";
+    output += tokens.map(token => token.symbol).join(' -> ') + ' -> ' + tokens[0].symbol + '\n';
+    output += `BlockNumber: ${res.block.number}\tGas Limit: ${res.block.gasLimit}\tTimeStamp: ${res.block.timestamp} (${new Date(res.block.timestamp as number * 1000).toUTCString()})\n`;
+    output += `Input: ${res.initialPrint} ${tokens[0].symbol}\tEstimate profit: ${res.profitPrint} ${tokens[0].symbol} ($ ${res.profitUSD})\n`;
+    output += stripAnsiCodes(res.table.render()) + '\n\n';
+
+    const date = new Date();
+    const fileName = `./logs/${date.getFullYear()}-${date.getMonth()}-${date.getDay()}.log`;
+    fs.appendFile(fileName, output, () => {});
 }
 
 const main = async () => {
@@ -41,8 +45,6 @@ const main = async () => {
     }
 
     await getTokens(args, 0);
-
-    fs.writeFileSync('output.json', JSON.stringify(output, null, '\t'));
 }
 
 main();

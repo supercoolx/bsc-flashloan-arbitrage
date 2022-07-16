@@ -13,6 +13,8 @@ import { web3, dexNames, erc20, swapRouter, flashSwap, multicall } from './globa
 
 const account = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY).address;
 
+export const stripAnsiCodes = (str: string) => str.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
+
 export const toPrintable = (amount: BN, decimal: number, fixed: number) => {
     return amount.isFinite()
         ? amount.div(new BN(10).pow(decimal)).toFixed(fixed)
@@ -120,6 +122,8 @@ export const run = async (initial: BN, tokens: Token[]) => {
         console.log('BlockNumber Conflict! Try again.');
         return {
             profit: new BN(-Infinity),
+            profitUSD: null,
+            table: null,
             callSwapParams: null
         }
     }
@@ -133,15 +137,22 @@ export const run = async (initial: BN, tokens: Token[]) => {
 
     const profit = maxAmountOut[tokens.length].minus(maxAmountOut[0]).minus(fee);
     const profitPrint = toPrintable(profit, tokens[0].decimals, FIXED);
+    const initialPrint = toPrintable(initial, tokens[0].decimals, FIXED);
+    const profitUSD = tokenPriceUSD ? toPrintable(tokenPriceUSD.times(profit), tokens[0].decimals + 8, FIXED) : 'N/A';
     console.log(
-        'Input:', toPrintable(initial, tokens[0].decimals, FIXED).yellow, tokens[0].symbol,
+        'Input:', initialPrint.yellow, tokens[0].symbol,
         '\tEstimate profit:', profit.gt(0) ? profitPrint.green : profitPrint.red, tokens[0].symbol,
-        `($ ${tokenPriceUSD ? toPrintable(tokenPriceUSD.times(profit), tokens[0].decimals + 8, FIXED) : 'N/A'})`,
+        `($ ${profitUSD})`,
         '\n'
     );
 
     return {
         profit,
+        profitPrint,
+        initialPrint,
+        profitUSD,
+        table,
+        block,
         callSwapParams: { maxAmountOut, tokens, swapPath }
     }
 }
