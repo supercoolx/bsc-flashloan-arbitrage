@@ -24,7 +24,13 @@
             "CafeSwap": "0x933DAea3a5995Fb94b14A7696a5F3ffD7B1E385A",
             "RadioShack": "0x5bc3ED94919af03279c8613cB807ab667cE5De99",
             "HyperSwap": "0x3bc677674df90A9e5D741f28f6CA303357D0E4Ec",
-            "BSCSwap": "0xd954551853F55deb4Ae31407c423e67B1621424A"
+            "BSCSwap": "0xd954551853F55deb4Ae31407c423e67B1621424A",
+            "NomiSwap": "0xD654953D746f0b114d1F85332Dc43446ac79413d",
+            "OrbitalSwap": "0x6B45064F128cA5ADdbf79825186F4e3e3c9E7EB5",
+            "SafeSwap": "0xE804f3C3E6DdA8159055428848fE6f2a91c2b9AF",
+            "Bitexblock": "0xc014dCa6395A943639653f7C23B674c38EDFfC69",
+            "MerrymenSwap": "0x30d70E3c613C50DA8030556aa949fbc21Fd51454",
+            "SphynxSwap": "0x6F68AeeA831BB78920005a34EA5ca293AaC0e1ad"
         },
         "chainlink": {
             "WBNB": "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE",
