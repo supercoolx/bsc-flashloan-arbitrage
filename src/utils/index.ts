@@ -100,19 +100,17 @@ export const run = async (initial: BN, tokens: Token[]) => {
         [blockNumber[i], amountOut[i]] = await getAllQuotes(maxAmountOut[i], tokens[i], tokens[next]);
         maxAmountOut[i + 1] = BN.max(...amountOut[i]);
         let amountIn: string = toPrintable(maxAmountOut[i], tokens[i].decimals, FIXED);
-
-        let amountPrint: string[] = [];
+        
+        const row = { 'Input Token': `${amountIn} ${tokens[i].symbol}` };
+        
         amountOut[i].forEach((out, key) => {
-            let print = toPrintable(out, tokens[next].decimals, FIXED);
             if (maxAmountOut[i + 1].eq(out)) {
-                amountPrint.push(print.green);
+                let print = toPrintable(out, tokens[next].decimals, FIXED);
+                row[dexNames[key]] = `${print.green} ${tokens[next].symbol}`;
                 swapPath.push(swapRouter[key]);
             }
-            else amountPrint.push(print.yellow);
         });
 
-        const row = { 'Input Token': `${amountIn} ${tokens[i].symbol}` };
-        dexNames.forEach((dexName, key) => { row[dexName] = `${amountPrint[key]} ${tokens[next].symbol}` });
         table.addRow(row);
     }
 
