@@ -99,6 +99,12 @@ export const run = async (initial: BN, tokens: Token[]) => {
 
         [blockNumber[i], amountOut[i]] = await getAllQuotes(maxAmountOut[i], tokens[i], tokens[next]);
         maxAmountOut[i + 1] = BN.max(...amountOut[i]);
+        if (maxAmountOut[i + 1].eq(-Infinity)) {
+            console.log(`Cannot swap ${tokens[i].symbol} to ${tokens[next].symbol}.`);
+            return {
+                profit: new BN(-Infinity)
+            }
+        }
         let amountIn: string = toPrintable(maxAmountOut[i], tokens[i].decimals, FIXED);
         
         const row = { 'Input Token': `${amountIn} ${tokens[i].symbol}` };
